@@ -1,0 +1,5 @@
+cmake==3.30.5
+conan==1.65.0
+ninja==1.11.1.1
+clang-format==15.0.7
+pre-commit==4.0.1
