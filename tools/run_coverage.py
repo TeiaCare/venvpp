@@ -42,7 +42,6 @@ def coverage(args):
     run([
         'gcovr', '-r', '.',
         '--xml', '--xml-pretty', '--output', args.xml_coverage_path,
-        # '--html-title', 'TeiaMqttListener',
         '--html-details', args.html_coverage_path,
         '--filter', 'hikvision_sdk/.*',
         '--exclude', '.*/tests/.*',
