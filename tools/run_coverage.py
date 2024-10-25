@@ -23,6 +23,7 @@ def parse():
     parser = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)
     parser.add_argument("compiler", help="Compiler name", choices=['gcc', 'clang', 'visual_studio'])
     parser.add_argument("compiler_version", help="Compiler version")
+    parser.add_argument("sources_root", help="Sources root directory")
     parser.add_argument("--xml_coverage_path", help="Coverage xml results path", required=False, default='./results/coverage/cobertura.xml')
     parser.add_argument("--html_coverage_path", help="Coverage html results path", required=False, default='./results/coverage/html/coverage.html')
     return parser.parse_args()
@@ -43,7 +44,7 @@ def coverage(args):
         'gcovr', '-r', '.',
         '--xml', '--xml-pretty', '--output', args.xml_coverage_path,
         '--html-details', args.html_coverage_path,
-        '--filter', 'hikvision_sdk/.*',
+        '--filter', f'{args.sources_root}/.*',
         '--exclude', '.*/tests/.*',
         '--gcov-executable', coverage_tool,
         '--exclude-unreachable-branches',
