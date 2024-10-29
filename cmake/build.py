@@ -15,6 +15,7 @@
 
 import argparse
 import sys
+import os
 from .command import run, check_venv
 
 def parse():
@@ -23,13 +24,12 @@ def parse():
     parser.add_argument("--build_dir", help="Build Directory", required=False, default='./build')
     args, _ = parser.parse_known_args()
     return args
-
 def main():
     args = parse()
     run([
         'cmake',
         '--build', f'{args.build_dir}/{args.build_type}',
-        '--parallel', '16'
+        '--parallel', str(os.cpu_count() // 2)
     ])
 
 if __name__ == '__main__':
