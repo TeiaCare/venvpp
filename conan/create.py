@@ -29,7 +29,6 @@ def parse():
     parser.add_argument("build_type", help="Debug or Release", choices=['Debug', 'Release', 'RelWithDebInfo'])
     parser.add_argument("compiler", help="Compiler name", choices=['gcc', 'clang', 'visual_studio'])
     parser.add_argument("compiler_version", help="Compiler version")
-    # parser.add_argument("-i", "--install_dir", help="Package install directory")
     return parser.parse_args()
 
 def run(command):
@@ -46,7 +45,7 @@ def conan_create(conanfile_directory, profile_path, build_type):
         '--profile:build', f'{profile_path}',
         '--profile:host', f'{profile_path}',
         '--build', 'missing',
-        '--test-folder', 'None' # TODO: remove this line once test_package is working properly
+        # '--test-folder', 'None' # TODO: remove this line once test_package is working properly
     ]
     run(command)
 
