@@ -26,6 +26,7 @@ def parse():
     parser.add_argument("sources_root", help="Sources root directory")
     parser.add_argument("--xml_coverage_path", help="Coverage xml results path", required=False, default='./results/coverage/cobertura.xml')
     parser.add_argument("--html_coverage_path", help="Coverage html results path", required=False, default='./results/coverage/html/coverage.html')
+    parser.add_argument("--extra_args", help="Additional arguments passed to gcovr", required=False, default=None)
     return parser.parse_args()
 
 def coverage(args):
@@ -40,7 +41,7 @@ def coverage(args):
     create_directory(args.xml_coverage_path)
     create_directory(args.html_coverage_path)
 
-    run([
+    cmd = [
         'gcovr', '-r', '.',
         '--xml', '--xml-pretty', '--output', args.xml_coverage_path,
         '--html-details', args.html_coverage_path,
@@ -48,8 +49,13 @@ def coverage(args):
         '--exclude', '.*/tests/.*',
         '--gcov-executable', coverage_tool,
         '--exclude-unreachable-branches',
-        '--exclude-throw-branches'
-    ])
+        '--exclude-throw-branches',
+    ]
+
+    if args.extra_args is not None:
+        cmd.append(args.extra_args)
+
+    run(cmd)
 
 if __name__ == '__main__':
     check()
