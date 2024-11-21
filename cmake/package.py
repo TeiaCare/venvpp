@@ -13,9 +13,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import argparse
+import os
 import sys
-from .command import run, check_venv
+import argparse
+import subprocess
 
 def parse():
     parser = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)
@@ -26,11 +27,16 @@ def parse():
 
 def main():
     args = parse()
-    run([
+    subprocess.run([
         'cpack',
         '--config', f'{args.build_dir}/{args.build_type}/CPackConfig.cmake',
-    ])
+    ], check=True)
 
 if __name__ == '__main__':
-    check_venv()
+    if not os.getenv('VIRTUAL_ENV'):
+        raise SystemError("\n========================================================"
+                          "\nYou are not running inside a python virtual environment"
+                          "\nConfigure and activate it as shown in the project README"
+                          "\n========================================================\n")
+
     sys.exit(main())

@@ -17,7 +17,6 @@ import sys
 import cmake.configure
 import cmake.build
 import cmake.install
-from cmake.command import check_venv
 
 def main():
     cmake.configure.main()
@@ -25,5 +24,4 @@ def main():
     cmake.install.main()
 
 if __name__ == '__main__':
-    check_venv()
     sys.exit(main())
