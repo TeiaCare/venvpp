@@ -40,7 +40,7 @@ def parse():
     parser.add_argument("package_name", help="Conan package name")
     parser.add_argument("artifactory_url", help="Artifactory server address")
     parser.add_argument("username", help="Remote username")
-    parser.add_argument("username", help="Remote password")
+    parser.add_argument("password", help="Remote password")
     return parser.parse_args()
 
 def conan_configure_remote(remote_name, artifactory_url, username, password):
