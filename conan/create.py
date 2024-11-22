@@ -31,23 +31,8 @@ def parse():
     parser.add_argument("compiler_version", help="Compiler version")
     return parser.parse_args()
 
-def run(command):
-    try:
-        ret = subprocess.run(command)
-        ret.check_returncode()
-    except Exception as e:
-        print(f'Unhandled Exception: {e}')
-
 def conan_create(conanfile_directory, profile_path, build_type):
-    command = [
-        'conan', 'create', f'{conanfile_directory}', '_/_',
-        '--settings', f'build_type={build_type}',
-        '--profile:build', f'{profile_path}',
-        '--profile:host', f'{profile_path}',
-        '--build', 'missing',
-        # '--test-folder', 'None' # TODO: remove this line once test_package is working properly
-    ]
-    run(command)
+    subprocess.run(['conan', 'create', f'{conanfile_directory}', '_/_', '--settings', f'build_type={build_type}', '--profile:build', f'{profile_path}', '--profile:host', f'{profile_path}', '--build', 'missing', ], check=True)
 
 def get_profile_path(profile_name):
     profile_path = pathlib.Path(os.getenv('CONAN_USER_HOME'), ".conan", "profiles", profile_name)

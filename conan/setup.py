@@ -34,11 +34,7 @@ def parse():
     return parser.parse_args()
 
 def run(command):
-    try:
-        ret = subprocess.run(command)
-        ret.check_returncode()
-    except Exception as e:
-        print(f'Unhandled Exception: {e}')
+    subprocess.run(command, check=True)
 
 def conan_profile_create(profile_name, args):
     run([ 'conan', 'config', 'set', 'general.revisions_enabled=1'])
@@ -104,15 +100,7 @@ def conan_profile_show(profile_name):
     run([ 'conan', 'profile', 'show', f'{profile_name}' ])
 
 def conan_install(conanfile_directory, profile_name, build_type):
-    command = [
-        'conan', 'install', f'{conanfile_directory}',
-        '--install-folder', f'build/modules',
-        '--settings', f'build_type={build_type}',
-        '--profile:build', f'{profile_name}',
-        '--profile:host', f'{profile_name}',
-        '--build', 'missing'
-    ]
-    run(command)
+    run([ 'conan', 'install', f'{conanfile_directory}', '--install-folder', f'build/modules', '--settings', f'build_type={build_type}', '--profile:build', f'{profile_name}', '--profile:host', f'{profile_name}', '--build', 'missing' ])
 
 def get_conanfile_directories(args):
     current_working_directory = pathlib.Path().resolve()
