@@ -19,6 +19,7 @@ from command import run
 def parse():
     parser = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)
     parser.add_argument("build_type", help="Debug or Release", choices=['Debug', 'Release', 'RelWithDebInfo'])
+    parser.add_argument("--program_path", required=False)
     parser.add_argument("--run_gtest", required=False, default=False, action='store_true')
     parser.add_argument("--test_dir", help="Unit Tests root directory", required=False, default='./build')
     parser.add_argument("--xml_results_path", help="Unit Tests xml results path", required=False, default='../../results/unit_tests/unit_tests.xml')
