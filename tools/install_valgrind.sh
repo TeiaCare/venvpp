@@ -1,9 +1,9 @@
 #!/bin/bash
 set -e
 
-VALGRIND_VERSION="3.20.0"
-CACHE_DIR="$1"
-COMPILER="$2"
+VALGRIND_VERSION="$1"
+CACHE_DIR="$2"
+COMPILER="$3"
 
 mkdir -p "$CACHE_DIR"
 
@@ -17,7 +17,6 @@ else
   sudo apt remove --purge valgrind -y
 
   # Download and extract valgrind
-  cd "$(mktemp -d)"
   wget https://sourceware.org/pub/valgrind/valgrind-$VALGRIND_VERSION.tar.bz2
   tar xf valgrind-$VALGRIND_VERSION.tar.bz2
 
