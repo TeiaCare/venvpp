@@ -45,26 +45,28 @@ def valgrind(args, program_args):
         raise ValueError("Select either --memcheck or --callgrind")
 
 def memcheck(args, program_args):
-    create_directory(args.memcheck_log_path)
-    create_directory(args.memcheck_output_path)
+    # create_directory(args.memcheck_log_path)
+    # create_directory(args.memcheck_output_path)
 
     cmd = [
         'valgrind',
         '--tool=memcheck',
-        '--verbose',
+        # '--verbose',
         '--leak-check=full',
         '--show-leak-kinds=all',
         '--track-origins=yes',
         '--error-exitcode=1',
         '--demangle=yes',
-        f'--suppressions={args.memcheck_suppression_path}',
-        '--xml=yes',
-        f'--xml-file={args.memcheck_output_path}',
-        f'--log-file={args.memcheck_log_path}',
+        # '--xml=yes',
+        # f'--xml-file={args.memcheck_output_path}',
+        # f'--log-file={args.memcheck_log_path}',
         '--child-silent-after-fork=yes',
         args.program_path
     ]
     # '--gen-suppressions=all',
+    
+    if args.memcheck_suppression_path:
+        cmd.extend(f'--suppressions={args.memcheck_suppression_path}')
 
     cmd.extend(program_args)
     run(cmd, debug=True)
