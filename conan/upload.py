@@ -41,6 +41,7 @@ def parse():
     parser.add_argument("artifactory_url", help="Artifactory server address")
     parser.add_argument("username", help="Remote username")
     parser.add_argument("password", help="Remote password")
+    parser.add_argument("-v", "--package_version", help="Specify package version to upload. If empty the default VERSION file is used.", required=False)
     return parser.parse_args()
 
 def conan_configure_remote(remote_name, artifactory_url, username, password):
@@ -48,8 +49,9 @@ def conan_configure_remote(remote_name, artifactory_url, username, password):
     subprocess.run(['conan', 'remote', 'add', remote_name, f'{artifactory_url}/{remote_name}', '--force'], check=True)
     subprocess.run(['conan', 'user', username, '-p', password, '-r', remote_name], check=True)
 
-def conan_upload(remote_name, package_name):
-    package_version = get_project_version()
+def conan_upload(remote_name, package_name, package_version):
+    if package_version is None:
+        package_version = get_project_version()
     print(f'Uploading: {package_name}/{package_version}')
     subprocess.run(['conan', 'upload', '--all', '--confirm', '--parallel', '--force', '--remote', remote_name, f'{package_name}/{package_version}@'], check=True)
 
@@ -61,7 +63,7 @@ def main():
     setup_conan_home()
     args = parse()
     conan_configure_remote(args.remote_name, args.artifactory_url, args.username, args.password)
-    conan_upload(args.remote_name, args.package_name)
+    conan_upload(args.remote_name, args.package_name, args.package_version)
 
 if __name__ == '__main__':
     sys.exit(main())
