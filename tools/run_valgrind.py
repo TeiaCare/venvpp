@@ -27,7 +27,7 @@ def parse():
     parser.add_argument("--memcheck", required=False, default=False, action='store_true')
     parser.add_argument("--memcheck_log_path", help="Valgrind memcheck log path", required=False, default='./results/memcheck/memcheck.log')
     parser.add_argument("--memcheck_output_path", help="Valgrind memcheck output path", required=False, default='./results/memcheck/memcheck.xml')
-    parser.add_argument("--memcheck_suppression_path", help="Valgrind memcheck suppression path", required=False, default='./scripts/valgrind/suppressions')
+    parser.add_argument("--memcheck_suppression_path", help="Valgrind memcheck suppression path", required=False)
 
     parser.add_argument("--callgrind", required=False, default=False, action='store_true')
     parser.add_argument("--callgrind_log_path", help="Valgrind callgrind log path", required=False, default='./results/callgrind/callgrind.log')
@@ -66,7 +66,7 @@ def memcheck(args, program_args):
     # '--gen-suppressions=all',
     
     if args.memcheck_suppression_path:
-        cmd.extend(f'--suppressions={args.memcheck_suppression_path}')
+        cmd.extend([f'--suppressions={args.memcheck_suppression_path}'])
 
     cmd.extend(program_args)
     run(cmd, debug=True)
