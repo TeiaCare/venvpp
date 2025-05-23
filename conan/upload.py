@@ -18,16 +18,6 @@ import argparse
 import pathlib
 import sys
 import os
-import re
-
-def get_project_version():
-    with open('VERSION', encoding='utf8') as version_file:
-        version_regex = r'^\d+\.\d+\.\d+$'
-        version = version_file.read().strip()
-        if re.match(version_regex, version):
-            return version
-        else:
-            raise ValueError(f"Invalid version detected into file VERSION: {version}")
 
 def setup_conan_home():
     current_working_directory = pathlib.Path().resolve()
@@ -37,11 +27,9 @@ def setup_conan_home():
 def parse():
     parser = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)
     parser.add_argument("remote_name", help="Conan remote name")
-    parser.add_argument("package_name", help="Conan package name")
     parser.add_argument("artifactory_url", help="Artifactory server address")
     parser.add_argument("username", help="Remote username")
     parser.add_argument("password", help="Remote password")
-    parser.add_argument("-v", "--package_version", help="Specify package version to upload. If empty the default VERSION file is used.", required=False)
     return parser.parse_args()
 
 def conan_configure_remote(remote_name, artifactory_url, username, password):
@@ -49,11 +37,8 @@ def conan_configure_remote(remote_name, artifactory_url, username, password):
     subprocess.run(['conan', 'remote', 'add', remote_name, f'{artifactory_url}/{remote_name}', '--force'], check=True)
     subprocess.run(['conan', 'user', username, '-p', password, '-r', remote_name], check=True)
 
-def conan_upload(remote_name, package_name, package_version):
-    if package_version is None:
-        package_version = get_project_version()
-    print(f'Uploading: {package_name}/{package_version}')
-    subprocess.run(['conan', 'upload', '--all', '--confirm', '--parallel', '--force', '--remote', remote_name, f'{package_name}/{package_version}@'], check=True)
+def conan_upload(remote_name):
+    subprocess.run(['conan', 'upload', '--all', '--confirm', '--parallel', '--check', '--remote', remote_name, "*"], check=True)
 
 def get_profile_path(profile_name):
     profile_path = pathlib.Path(os.getenv('CONAN_USER_HOME'), ".conan", "profiles", profile_name)
@@ -63,7 +48,7 @@ def main():
     setup_conan_home()
     args = parse()
     conan_configure_remote(args.remote_name, args.artifactory_url, args.username, args.password)
-    conan_upload(args.remote_name, args.package_name, args.package_version)
+    conan_upload(args.remote_name)
 
 if __name__ == '__main__':
     sys.exit(main())
