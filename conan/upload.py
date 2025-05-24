@@ -38,7 +38,7 @@ def conan_configure_remote(remote_name, artifactory_url, username, password):
     subprocess.run(['conan', 'user', username, '-p', password, '-r', remote_name], check=True)
 
 def conan_upload(remote_name):
-    subprocess.run(['conan', 'upload', '--all', '--confirm', '--parallel', '--check', '--no-overwrite', 'recipe', '--remote', remote_name, "*"], check=True)
+    subprocess.run(['conan', 'upload', '--all', '--confirm', '--parallel', '--check', '--remote', remote_name, "*"], check=True)
 
 def get_profile_path(profile_name):
     profile_path = pathlib.Path(os.getenv('CONAN_USER_HOME'), ".conan", "profiles", profile_name)
