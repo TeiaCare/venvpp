@@ -22,7 +22,7 @@ import sys
 
 def parse():
     parser = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)
-    parser.add_argument("--doxyfile_path", help="Path of the Doxyfile to be used", default="sdk/docs/Doxyfile")
+    parser.add_argument("-d","--doxyfile_path", help="Path of the Doxyfile to be used")
     return parser.parse_args()
 
 def main():
