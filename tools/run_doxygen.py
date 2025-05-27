@@ -22,7 +22,7 @@ import sys
 
 def parse():
     parser = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)
-    parser.add_argument("-d","--doxyfile_path", help="Path of the Doxyfile to be used")
+    parser.add_argument("-d","--doxyfile_path", help="Path of the Doxyfile to be used", default="Doxyfile")
     return parser.parse_args()
 
 def main():
@@ -30,6 +30,10 @@ def main():
     doxyfile_path = pathlib.Path(args.doxyfile_path).absolute()
     if not doxyfile_path.exists() or not doxyfile_path.is_file():
         raise RuntimeError(f'Doxyfile does not exist: {doxyfile_path}')
+
+    doxygen_scripts_path = pathlib.Path("doxygen").absolute()
+    if not doxygen_scripts_path.exists() or not doxygen_scripts_path.is_dir():
+        raise RuntimeError(f'Doxygen files not found. Make sure to clone the doxygen repository in the root of the project: {doxygen_scripts_path}')
 
     print("Doxygen version:")
     run(['doxygen', '--version'])
