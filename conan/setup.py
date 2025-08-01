@@ -21,6 +21,10 @@ import sys
 import os
 
 def setup_conan_home():
+    if os.getenv('CONAN_USER_HOME') != None:
+        print("CONAN_USER_HOME already set to:", os.getenv('CONAN_USER_HOME'))
+        return
+    
     current_working_directory = pathlib.Path().resolve()
     os.environ['CONAN_USER_HOME'] = str(current_working_directory.absolute())
     print("CONAN_USER_HOME:", os.getenv('CONAN_USER_HOME'))
